@@ -3,38 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DnD Party Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Curse of Strahd - Party Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h2>balls</h2>
-    
-        <header>
-            <h1>DnD Party Tracker</h1>
-            <button id="add-loot">Add Loot</button>
-            <button id="add-quest">Add Quest</button>
-        </header>
-    
+        <div class="header-content">
+            <h1>⚰️ Curse of Strahd ⚰️</h1>
+            <p class="tagline">A Tale of Darkness and Despair</p>
+            <div class="button-group">
+                <button id="add-loot" class="btn btn-gold">🗝️ Add Loot</button>
+                <button id="add-quest" class="btn btn-crimson">⚔️ Add Quest</button>
+            </div>
+        </div>
     </header>
+    
     <main>
-        <section id="loot">
-            <h2>Loot</h2>
-            <ul id="loot-list">
-                <!-- Loot items will be added here -->
-            </ul>
-        </section>
-        <section id="story">
-            <h2>Story</h2>
-            <textarea id="story-text" rows="10" cols="50"></textarea>
-        </section>
-        <section id="quests">
-            <h2>Quests</h2>
-            <ul id="quests-list">
+        <section id="quests" class="card">
+            <h2>⚔️ Active Quests</h2>
+            <ul id="quests-list" class="item-list">
                 <!-- Quests will be added here -->
             </ul>
         </section>
+
+        <section id="loot" class="card">
+            <h2>💰 Treasures & Loot</h2>
+            <ul id="loot-list" class="item-list">
+                <!-- Loot items will be added here -->
+            </ul>
+        </section>
+
+        <section id="story" class="card">
+            <h2>📖 Chronicle of Events</h2>
+            <textarea id="story-text" rows="12" placeholder="Record the dark deeds and haunting tales of your journey through Barovia..."></textarea>
+        </section>
     </main>
+
+    <footer>
+        <p>May the mists of Barovia guide your path...</p>
+    </footer>
+
     <script src="scripts.js"></script>
 </body>
 </html>
