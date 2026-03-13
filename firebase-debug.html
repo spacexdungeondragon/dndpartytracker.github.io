@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Debug Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .info { color: #ff0; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Firebase Debug Test</h1>
+    <div id="status">Testing Firebase connection...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+
+        function log(message, type = 'info') {
+            console.log(message);
+            statusDiv.innerHTML += `<div class="${type}">${new Date().toLocaleTimeString()}: ${message}</div>`;
+        }
+
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBD2zEBCmVRRVBKroDWKsJ9S7oXBPuzGgs",
+            authDomain: "dnd-curse-of-strahd.firebaseapp.com",
+            projectId: "dnd-curse-of-strahd",
+            storageBucket: "dnd-curse-of-strahd.firebasestorage.app",
+            messagingSenderId: "1003543560913",
+            appId: "1:1003543560913:web:7eea96491d237038bc7bf0",
+            measurementId: "G-0V2V3CQ8K5"
+        };
+
+        async function testFirebase() {
+            try {
+                log('1. Initializing Firebase...', 'info');
+                firebase.initializeApp(firebaseConfig);
+                log('✅ Firebase app initialized', 'success');
+
+                log('2. Getting Firestore instance...', 'info');
+                const db = firebase.firestore();
+                log('✅ Firestore instance created', 'success');
+
+                log('3. Testing write access...', 'info');
+                await db.collection('test').doc('debug').set({
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    message: 'Debug test successful'
+                });
+                log('✅ Write test successful', 'success');
+
+                log('4. Testing read access...', 'info');
+                const doc = await db.collection('test').doc('debug').get();
+                if (doc.exists) {
+                    log('✅ Read test successful', 'success');
+                    log('📄 Document data: ' + JSON.stringify(doc.data()), 'info');
+                } else {
+                    log('⚠️ Document not found', 'error');
+                }
+
+                log('5. Testing real-time listener...', 'info');
+                db.collection('test').doc('debug').onSnapshot((doc) => {
+                    if (doc.exists) {
+                        log('🔄 Real-time update received', 'success');
+                    }
+                }, (error) => {
+                    log('❌ Listener error: ' + error.message, 'error');
+                });
+
+                log('🎉 All Firebase tests passed!', 'success');
+
+            } catch (error) {
+                log('❌ Firebase Error: ' + error.message, 'error');
+                log('📋 Full error: ' + JSON.stringify(error), 'error');
+
+                if (error.code) {
+                    log('🏷️ Error Code: ' + error.code, 'error');
+
+                    // Common error explanations
+                    switch (error.code) {
+                        case 'permission-denied':
+                            log('💡 This means your Firestore security rules are blocking access', 'info');
+                            break;
+                        case 'unavailable':
+                            log('💡 Firebase service is temporarily unavailable', 'info');
+                            break;
+                        case 'unauthenticated':
+                            log('💡 Authentication required (but we\'re in test mode)', 'info');
+                            break;
+                    }
+                }
+            }
+        }
+
+        // Run the test
+        testFirebase();
+    </script>
+</body>
+</html>
