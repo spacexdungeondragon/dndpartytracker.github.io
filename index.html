@@ -8,6 +8,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Campaign Access Gate -->
+    <div id="campaign-gate" class="campaign-gate">
+        <div class="gate-content">
+            <div class="gate-header">
+                <h1>⚰️ The Gates of Ravenloft ⚰️</h1>
+                <p class="gate-subtitle">Who dares enter the domain of Count Strahd?</p>
+            </div>
+
+            <div class="gate-form">
+                <div id="riddle-container" class="riddle-container">
+                    <div class="riddle-question">
+                        <div class="secret-type">🔥 WIZARD'S RIDDLE</div>
+                        <div class="secret-question">
+                            "A sphere of flame, a burst of light,<br>
+                            What spell brings foes their fiery plight?<br>
+                            Eight letters long, this magic's name,<br>
+                            Turns battlefields to blazing flame."
+                        </div>
+                        <div class="secret-hint" id="hint-text" style="display: none;">
+                            💡 Every wizard's favorite 3rd-level spell...
+                        </div>
+                        <button class="btn btn-gold hint-btn" onclick="showHint()" style="font-size: 0.8em; margin-top: 1em;">💡 Need a Hint?</button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="secret-answer" placeholder="Speak the spell's name..." />
+                    </div>
+                </div>
+
+                <button id="enter-campaign" class="btn btn-crimson">🔥 Cast Your Answer</button>
+
+                <div class="gate-hints">
+                    <p><em>"Only those versed in the arcane arts may pass..."</em></p>
+                    <p><small>🧙‍♂️ Your party wizard knows this one well</small></p>
+                </div>
+            </div>
+
+            <div class="gate-footer">
+                <p><em>"The mists part only for those who belong..."</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application (hidden until authenticated) -->
+    <div id="main-app" style="display: none;">
+        <div class="campaign-info">
+            <span id="current-campaign">Campaign: Unknown</span>
+            <button id="change-campaign" class="btn btn-gold" style="font-size: 0.8em; padding: 0.3em 0.8em; margin-left: 1em;">🔄 Change</button>
+        </div>
+
     <header>
         <div class="header-content">
             <h1>⚰️ Curse of Strahd ⚰️</h1>
@@ -455,6 +504,116 @@
         let isDMMode = false;
         let dmFilter = 'all';
 
+        // Simple Campaign Password - Easy to Share with Party!
+        const secretPassword = 'fireball';
+        let currentCampaign = localStorage.getItem('campaignName') || null;
+
+        // Simple Gate Functions
+        function checkCampaignAccess() {
+            if (currentCampaign) {
+                showMainApp();
+            } else {
+                showCampaignGate();
+            }
+        }
+
+        function showMainApp() {
+            document.getElementById('campaign-gate').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('current-campaign').textContent = `🔥 Spell Mastery Proven`;
+        }
+
+        function showCampaignGate() {
+            document.getElementById('campaign-gate').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+        }
+
+        function showHint() {
+            const hintElement = document.getElementById('hint-text');
+            const hintBtn = document.querySelector('.hint-btn');
+
+            hintElement.style.display = 'block';
+            hintBtn.style.display = 'none';
+
+            // Add dramatic reveal effect
+            hintElement.style.animation = 'fadeIn 1s';
+        }
+
+        function attemptSecretEntry() {
+            const enteredAnswer = document.getElementById('secret-answer').value.trim().toLowerCase();
+
+            if (!enteredAnswer) {
+                alert('🔥 Speak the name of the spell!');
+                return;
+            }
+
+            // Check if answer is correct (flexible matching)
+            if (enteredAnswer === secretPassword ||
+                enteredAnswer === 'fire ball' ||
+                enteredAnswer.includes('fireball')) {
+
+                // Success! Grant access
+                currentCampaign = 'Fireball Casters';
+                localStorage.setItem('campaignName', currentCampaign);
+
+                // Dramatic success message
+                const successMessages = [
+                    "🔥 The flames recognize a true wizard!",
+                    "✨ Arcane power flows through you!",
+                    "🎆 The spell ignites the gateway!",
+                    "⚡ Magic crackles in the air!",
+                    "🌟 You have proven your spellcasting prowess!"
+                ];
+
+                const success = successMessages[Math.floor(Math.random() * successMessages.length)];
+                alert(`${success}\n\nWelcome, master of the arcane arts!`);
+
+                showMainApp();
+            } else {
+                // Dramatic failure
+                const failures = [
+                    "🌫️ The spell fizzles and fails...",
+                    "❄️ Your magic lacks the proper heat...",
+                    "💨 The incantation dissolves into smoke...",
+                    "🌙 The arcane words hold no power...",
+                    "🚪 The magical barrier remains intact...",
+                    "📚 Perhaps you should study your spellbook more...",
+                    "🎭 Even apprentice wizards know this one!"
+                ];
+
+                const failure = failures[Math.floor(Math.random() * failures.length)];
+                alert(`❌ ${failure}\n\nConsult your party's wizard, young apprentice.`);
+
+                // Shake effect and clear
+                const input = document.getElementById('secret-answer');
+                input.value = '';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+
+                // Show hint button again if it was hidden
+                const hintBtn = document.querySelector('.hint-btn');
+                if (hintBtn) hintBtn.style.display = 'inline-block';
+            }
+        }
+
+        function changeCampaign() {
+            if (confirm('🔥 Extinguish your magical access and return to the riddle?\n\nYou must cast the correct spell again to re-enter...')) {
+                localStorage.removeItem('campaignName');
+                currentCampaign = null;
+                showCampaignGate();
+
+                // Reset the hint
+                document.getElementById('hint-text').style.display = 'none';
+                const hintBtn = document.querySelector('.hint-btn');
+                if (hintBtn) hintBtn.style.display = 'inline-block';
+            }
+        }
+
+        // Make showHint available globally
+        window.showHint = showHint;
+
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
@@ -469,6 +628,9 @@
         const campaignId = 'strahd-campaign-1';
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Check campaign access first
+            checkCampaignAccess();
+
             const lootList = document.getElementById('loot-list');
             const storyText = document.getElementById('story-text');
             const questsList = document.getElementById('quests-list');
@@ -2479,6 +2641,15 @@
             document.getElementById('show-results').addEventListener('click', showResults);
             document.getElementById('close-awards').addEventListener('click', closeAwards);
 
+            // Simple gate event listeners
+            document.getElementById('enter-campaign').addEventListener('click', attemptSecretEntry);
+            document.getElementById('change-campaign').addEventListener('click', changeCampaign);
+            document.getElementById('secret-answer').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    attemptSecretEntry();
+                }
+            });
+
             // Sync button
             if (syncStatus) {
                 syncStatus.addEventListener('click', () => {
@@ -2501,5 +2672,6 @@
             }, 100);
         });
     </script>
+    </div> <!-- End main-app -->
 </body>
 </html>

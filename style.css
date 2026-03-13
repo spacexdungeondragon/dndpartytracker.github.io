@@ -1159,6 +1159,22 @@ footer {
     to { transform: rotate(360deg); }
 }
 
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mysteryglow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+}
+
 .awards-announcement h3 {
     font-family: 'Cinzel', serif;
     font-size: 2em;
@@ -1444,6 +1460,330 @@ footer {
     padding: 1em;
     margin-bottom: 1em;
     color: #d4af37;
+}
+
+/* Campaign Access Gate Styling */
+.campaign-gate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #2d0a2d 100%);
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(75, 0, 130, 0.15) 0%, transparent 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.gate-content {
+    background: linear-gradient(135deg, rgba(25, 25, 45, 0.9) 0%, rgba(30, 10, 30, 0.9) 100%);
+    border: 3px solid #d4af37;
+    border-radius: 20px;
+    padding: 3em;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(139, 0, 0, 0.5), inset 0 0 20px rgba(212, 175, 55, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.gate-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+    animation: rotate 30s linear infinite;
+    pointer-events: none;
+}
+
+.gate-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5em;
+    margin: 0;
+    color: #d4af37;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(139, 0, 0, 0.4);
+    font-weight: 700;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 1;
+}
+
+.gate-subtitle {
+    font-style: italic;
+    color: #8b8b8b;
+    margin: 1em 0 2em 0;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+}
+
+.gate-form {
+    position: relative;
+    z-index: 1;
+    margin: 2em 0;
+}
+
+.gate-form .form-group {
+    margin-bottom: 2em;
+}
+
+.gate-form label {
+    display: block;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.gate-form input {
+    width: 100%;
+    padding: 1em;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid rgba(212, 175, 55, 0.4);
+    border-radius: 8px;
+    color: #d4af37;
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1em;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.gate-form input:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(212, 175, 55, 0.1);
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.gate-form input::placeholder {
+    color: #666;
+    font-style: italic;
+}
+
+.gate-form .btn {
+    font-size: 1.2em;
+    padding: 1em 2em;
+    margin-top: 1em;
+    min-width: 200px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+}
+
+.gate-hints {
+    margin-top: 2em;
+    opacity: 0.8;
+}
+
+.gate-hints p {
+    color: #8b8b8b;
+    font-style: italic;
+    margin: 0.5em 0;
+}
+
+.gate-hints small {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.gate-footer {
+    margin-top: 2em;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    padding-top: 1em;
+}
+
+.gate-footer p {
+    color: #8b8b8b;
+    font-style: italic;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+/* Mysterious Riddle Interface */
+.riddle-container {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 15px;
+    padding: 2em;
+    margin: 2em 0;
+    animation: mysteryglow 4s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.riddle-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    animation: sweep 8s linear infinite;
+}
+
+@keyframes sweep {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.secret-type {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9em;
+    color: #ff6b6b;
+    text-align: center;
+    margin-bottom: 1em;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+}
+
+.secret-question {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.3em;
+    color: #d4af37;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 1.5em;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.secret-hint {
+    background: rgba(139, 0, 0, 0.2);
+    border: 1px solid rgba(139, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em 0;
+    font-style: italic;
+    color: #ff6b6b;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.secret-hint::before {
+    content: '💡 ';
+    font-size: 1.2em;
+}
+
+.hint-btn {
+    font-size: 0.8em !important;
+    padding: 0.5em 1em !important;
+    margin-top: 1em;
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+}
+
+.hint-btn:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+#secret-answer {
+    font-size: 1.1em !important;
+    text-align: center !important;
+    letter-spacing: 2px;
+    text-transform: lowercase;
+    border: 3px solid rgba(212, 175, 55, 0.4) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: #d4af37 !important;
+    border-radius: 10px !important;
+    padding: 1em !important;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+#secret-answer:focus {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.5) !important;
+    text-transform: none;
+    letter-spacing: 1px;
+}
+
+#secret-answer::placeholder {
+    color: #666 !important;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+/* Enhanced button styles for mystery theme */
+.gate-form .btn {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.gate-form .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5);
+}
+
+/* Campaign Info Bar */
+.campaign-info {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(139, 0, 0, 0.1);
+    border-bottom: 2px solid rgba(139, 0, 0, 0.3);
+    padding: 0.5em 1em;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.campaign-info #current-campaign {
+    color: #ff6b6b;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+}
+
+/* Adjust main content to account for campaign info bar */
+#main-app header {
+    margin-top: 60px;
+}
+
+@media (max-width: 768px) {
+    .gate-content {
+        padding: 2em;
+        margin: 1em;
+    }
+
+    .gate-header h1 {
+        font-size: 2em;
+    }
+
+    .campaign-info {
+        flex-direction: column;
+        gap: 0.5em;
+        padding: 0.75em;
+        text-align: center;
+    }
+
+    #main-app header {
+        margin-top: 80px;
+    }
 }
 
 /* Enhanced Quest System Styling */
