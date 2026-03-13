@@ -150,6 +150,57 @@ A collaborative web-based tracker for our Curse of Strahd campaign with real-tim
 - Random encounter generator with Strahd commentary
 - Party decision history with consequences tracker
 
+## 🧩 **Riddle Bank for Future Features**
+
+*These campaign-specific riddles could be used for special unlocks, secret areas, bonus content, or advanced DM features!*
+
+### **🌹 Strahd Lore Riddles:**
+- **"What flower blooms eternal in the Dark Lord's heart, yet brings him only sorrow?"**
+  *Answer: Tatyana/Ireena* | *Hint: "A name that echoes through centuries..."*
+
+- **"What word does Strahd never say, for it reminds him of what he can never have?"**
+  *Answer: Love/Peace/Redemption* | *Hint: "The emotion that damns and saves..."*
+
+- **"When the moon is dark and the mists are thick, what card seals your fate?"**
+  *Answer: Darklord/Dark Lord* | *Hint: "The Tarokka speaks of your destiny..."*
+
+### **🏰 Location-Based Riddles:**
+- **"What number crowns the towers of Ravenloft, binding fate with its cursed geometry?"**
+  *Answer: 9/Nine* | *Hint: "Count the spires that pierce the sky..."*
+
+- **"In what village do they force smiles to hide their despair?"**
+  *Answer: Vallaki* | *Hint: "All will be well... or else."*
+
+- **"Complete the Dark Lord's whisper: 'Welcome to _______, enjoy your stay...'"**
+  *Answer: Barovia/My Domain* | *Hint: "The land itself is his prison..."*
+
+### **📚 Campaign Meta Riddles:**
+- **"What three letters mark the domain where the sun never truly rises?"**
+  *Answer: CoS/C.O.S* | *Hint: "The initials of your cursed tale..."*
+
+### **⭐ Custom Party Riddles Template:**
+```javascript
+{
+    question: "🗡️ What weapon did [Character Name] lose in Death House?",
+    answers: ['longsword', 'family blade'],
+    hint: "It belonged to their grandfather..."
+},
+{
+    question: "🎭 What alias does [NPC] use when visiting the tavern?",
+    answers: ['mysterious_stranger', 'the_hooded_one'],
+    hint: "They never reveal their true face..."
+}
+```
+
+## 💡 **Potential Uses for Riddles:**
+- **🔐 Advanced DM Panel Access** (harder riddles for sensitive controls)
+- **🎁 Easter Egg Content** (unlock bonus features)
+- **🏆 Achievement System** (solve riddles to earn campaign badges)
+- **🎪 Mini-Games** (riddle contests during downtime)
+- **📚 Lore Unlocks** (answer riddles to reveal campaign secrets)
+- **🎭 Character Challenges** (riddles specific to character backgrounds)
+- **🌟 Session Prep** (DM uses riddles to test player knowledge)
+
 ## 🎯 **Next Steps**
 1. **Test current features** with party
 2. **Choose next feature** from Phase 1-4
