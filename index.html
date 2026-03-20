@@ -100,6 +100,19 @@
             <textarea id="story-text" rows="12" placeholder="Record the dark deeds and haunting tales of your journey through Barovia..."></textarea>
         </section>
 
+        <section id="memorable-quotes" class="card">
+            <h2>💬 Memorable Quotes Board</h2>
+            <p class="section-subtitle">The words that echo through the mists of Barovia</p>
+
+            <div class="quotes-controls">
+                <button id="add-quote-btn" class="btn btn-gold">✨ Add Quote</button>
+            </div>
+
+            <div id="quotes-container" class="quotes-grid">
+                <!-- Quotes will appear here -->
+            </div>
+        </section>
+
         <section id="funny-stats" class="card">
             <h2>😂 Ridiculous Campaign Stats</h2>
             <div class="stats-grid">
@@ -653,6 +666,7 @@
             let petitionsData = [];
             let decreesData = [];
             let relationshipsData = [];
+            let quotesData = [];
             let currentAwardsSession = null;
 
             // Quest system state
@@ -696,6 +710,7 @@
                 petitionsData = JSON.parse(localStorage.getItem('dndPetitions')) || [];
                 decreesData = JSON.parse(localStorage.getItem('dndDecrees')) || [];
                 relationshipsData = JSON.parse(localStorage.getItem('dndRelationships')) || [];
+                quotesData = JSON.parse(localStorage.getItem('dndQuotes')) || [];
                 currentAwardsSession = JSON.parse(localStorage.getItem('dndCurrentAwards')) || null;
 
                 renderList(lootList, lootData);
@@ -706,6 +721,7 @@
                 renderPetitions();
                 renderDecrees();
                 renderRelationships();
+                renderQuotes();
                 renderAwardsState();
 
                 // Update DM panel if active
@@ -1577,6 +1593,88 @@
                 await saveToFirebase({ relationships: relationshipsData });
             };
 
+            // ========================================
+            // Memorable Quotes Functions
+            // ========================================
+
+            // Render quotes for all users
+            function renderQuotes() {
+                const container = document.getElementById('quotes-container');
+                if (!container) return;
+
+                container.innerHTML = '';
+
+                if (quotesData.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-npcs">
+                            <p>No memorable quotes yet.</p>
+                            <p><em>The party's adventures await their first unforgettable words...</em></p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Show most recent quotes first
+                const sortedQuotes = [...quotesData].reverse();
+
+                sortedQuotes.forEach(quote => {
+                    const quoteCard = document.createElement('div');
+                    quoteCard.className = 'quote-card';
+
+                    quoteCard.innerHTML = `
+                        <div class="quote-text">"${quote.text}"</div>
+                        <div class="quote-attribution">
+                            <span class="quote-speaker">— ${quote.speaker}</span>
+                            ${quote.context ? `<span class="quote-context">${quote.context}</span>` : ''}
+                        </div>
+                        <button class="quote-delete-btn" onclick="deleteQuote('${quote.id}')">×</button>
+                    `;
+
+                    container.appendChild(quoteCard);
+                });
+            }
+
+            // Add new quote
+            async function addQuote() {
+                const text = prompt('💬 Enter the quote:');
+                if (!text || !text.trim()) return;
+
+                const speaker = prompt('🎭 Who said it?');
+                if (!speaker || !speaker.trim()) return;
+
+                const context = prompt('📍 Context/situation (optional):') || '';
+
+                const newQuote = {
+                    id: Date.now().toString(),
+                    text: text.trim(),
+                    speaker: speaker.trim(),
+                    context: context.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                quotesData.push(newQuote);
+                localStorage.setItem('dndQuotes', JSON.stringify(quotesData));
+
+                renderQuotes();
+                await saveToFirebase({ quotes: quotesData });
+            }
+
+            // Delete quote
+            window.deleteQuote = async function(quoteId) {
+                const quote = quotesData.find(q => q.id == quoteId);
+                if (!quote) return;
+
+                if (!confirm(`Delete this quote by ${quote.speaker}?`)) {
+                    return;
+                }
+
+                quotesData = quotesData.filter(q => q.id != quoteId);
+                localStorage.setItem('dndQuotes', JSON.stringify(quotesData));
+
+                renderQuotes();
+                await saveToFirebase({ quotes: quotesData });
+            };
+
             // DM Panel Functions
             function toggleDMPanel() {
                 if (!isDMMode) {
@@ -1776,6 +1874,7 @@
                         petitions: data.petitions || petitionsData,
                         decrees: data.decrees || decreesData,
                         relationships: data.relationships || relationshipsData,
+                        quotes: data.quotes || quotesData,
                         currentAwards: data.currentAwards !== undefined ? data.currentAwards : currentAwardsSession,
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     }, { merge: true });
@@ -1810,6 +1909,7 @@
                         petitionsData = data.petitions || [];
                         decreesData = data.decrees || [];
                         relationshipsData = data.relationships || [];
+                        quotesData = data.quotes || [];
                         currentAwardsSession = data.currentAwards || null;
 
                         renderList(lootList, lootData);
@@ -1820,6 +1920,7 @@
                         renderPetitions();
                         renderDecrees();
                         renderRelationships();
+                        renderQuotes();
                         renderAwardsState();
 
                         // Update DM panel if active
@@ -2606,6 +2707,7 @@
             // Event listeners
             document.getElementById('add-loot').addEventListener('click', addLootItem);
             document.getElementById('add-quest').addEventListener('click', addQuest);
+            document.getElementById('add-quote-btn').addEventListener('click', addQuote);
 
             // Quest filter event listeners
             document.getElementById('show-all-quests').addEventListener('click', () => setQuestFilter('all'));
