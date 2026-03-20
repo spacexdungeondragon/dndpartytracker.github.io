@@ -757,6 +757,17 @@
                 const li = document.createElement('li');
                 li.textContent = item;
 
+                // Add edit button
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '✏️ Edit';
+                editBtn.className = 'edit-btn';
+                editBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    editLootItem(index);
+                };
+                li.appendChild(editBtn);
+
+                // Add delete button
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = '✕ Delete';
                 deleteBtn.className = 'delete-btn';
@@ -1979,6 +1990,20 @@
                 const item = prompt('Enter loot item:');
                 if (item && item.trim()) {
                     lootData.push(item.trim());
+                    localStorage.setItem('dndLoot', JSON.stringify(lootData));
+                    renderList(lootList, lootData);
+                    await saveToFirebase({ loot: lootData });
+                }
+            }
+
+            // Edit loot item
+            async function editLootItem(index) {
+                const currentItem = lootData[index];
+                if (!currentItem) return;
+
+                const newItem = prompt('Edit loot item:', currentItem);
+                if (newItem && newItem.trim() && newItem.trim() !== currentItem) {
+                    lootData[index] = newItem.trim();
                     localStorage.setItem('dndLoot', JSON.stringify(lootData));
                     renderList(lootList, lootData);
                     await saveToFirebase({ loot: lootData });
